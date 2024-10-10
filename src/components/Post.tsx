@@ -27,8 +27,6 @@ const Post: React.FC<IPosts> = ({
   useEffect(() => {
     if (currentUser?._id) {
       isSetLiked(likes?.includes(currentUser._id) ?? false);
-    } else {
-      isSetLiked(false);
     }
   }, [currentUser?._id, likes]);
 
