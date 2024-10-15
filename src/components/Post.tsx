@@ -24,6 +24,7 @@ const Post: React.FC<IPosts> = ({
     (state: RootState) => state.authSlice,
   );
 
+  console.log("IMG", img);
   useEffect(() => {
     if (currentUser?._id) {
       isSetLiked(likes?.includes(currentUser._id) ?? false);
@@ -43,7 +44,7 @@ const Post: React.FC<IPosts> = ({
   if (!user) {
     return "Loading...";
   }
-  console.log(_id);
+
   const addLike = () => {
     try {
       axios.put("http://localhost:8800/api/posts/" + _id + "/like", {
