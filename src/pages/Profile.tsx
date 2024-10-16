@@ -22,7 +22,6 @@ const Profile = () => {
     fetcedUser();
   }, []);
 
-  console.log(user);
   return (
     <>
       <Header />
