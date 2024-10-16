@@ -15,7 +15,23 @@ interface IAuth {
 }
 
 const initialState: IAuth = {
-  user: null,
+  user: {
+    profilePicture: "http://localhost:5173/src/assets/person/1.jpeg",
+    coverPicture: "http://localhost:5173/src/assets/post/10.jpeg",
+    followers: ["66cb0f46dca57d13a6d7aadf", "66cb16ba48f0081798855a5f"],
+    followings: ["66cb16ba48f0081798855a5f"],
+    isAdmin: false,
+    _id: "66cb1a3fb79fb9191d3fe21b",
+    username: "Han",
+    email: "Han@gmail.com",
+
+    createdAt: "2024-08-25T11:49:19.661Z",
+
+    desc: "This is Han desc",
+    from: "Vietnam",
+    relationship: "2",
+    city: "Korea",
+  },
   isFecthing: "",
   error: false,
 };

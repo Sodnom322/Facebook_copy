@@ -24,7 +24,6 @@ const Post: React.FC<IPosts> = ({
     (state: RootState) => state.authSlice,
   );
 
-  console.log("IMG", img);
   useEffect(() => {
     if (currentUser?._id) {
       isSetLiked(likes?.includes(currentUser._id) ?? false);
@@ -39,7 +38,7 @@ const Post: React.FC<IPosts> = ({
       setUser(res.data);
     };
     fetcedUser();
-  }, [userId]);
+  }, []);
 
   if (!user) {
     return "Loading...";

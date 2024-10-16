@@ -18,7 +18,13 @@ const Feed: React.FC<TFeed> = ({ username }) => {
         : await axios.get(
             `http://localhost:8800/api/posts/timeline/${user?._id}`,
           );
-      setPosts(res.data);
+      setPosts(
+        res.data.sort((p1: IUser, p2: IUser) => {
+          return (
+            new Date(p2.createdAt).getTime() - new Date(p1.createdAt).getTime()
+          );
+        }),
+      );
     };
 
     fetcedPosts();

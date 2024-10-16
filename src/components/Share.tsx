@@ -25,7 +25,6 @@ const Share = () => {
     img: string | undefined;
   }
 
-  console.log(file);
   const onSubmit: SubmitHandler<IDesc> = async (data) => {
     const newPost: IDesc = {
       userId: user?._id,
@@ -41,11 +40,9 @@ const Share = () => {
           "http://localhost:8800/api/upload",
           formData,
         );
-
-        console.log("formdata", formData);
+        console.log(uploadResponse);
         const imgQ = uploadResponse.data?.imgPath; // Получаем URL изображения
         newPost.img = imgQ;
-        console.log("NEW POST", imgQ);
 
         await axios.post("http://localhost:8800/api/posts", newPost);
       } catch (error) {
@@ -54,6 +51,7 @@ const Share = () => {
     } else {
       await axios.post("http://localhost:8800/api/posts", newPost);
     }
+    window.location.reload();
   };
 
   return (
@@ -61,6 +59,7 @@ const Share = () => {
       <div className="p-3">
         <section className="flex items-center">
           <img
+            loading="lazy"
             className="w-12 h-12 rounded-full object-cover mr-2"
             src={
               user?.profilePicture
@@ -86,9 +85,8 @@ const Share = () => {
               className="flex items-center mr-4 cursor-pointer hover:bg-blue-100 rounded-lg p-1 transition-all"
             >
               <PermMedia htmlColor="tomato" className="mr-3 !text-3xl" />
-              <span className="text-lg font-light">Photo or Video</span>
+
               <input
-                className="hidden"
                 type="file"
                 id="file"
                 accept=".png,.jpeg,.jpg"
@@ -99,6 +97,7 @@ const Share = () => {
                 }}
               />
             </label>
+
             <div className="flex items-center mr-4 cursor-pointer">
               <Label className="mr-3 !text-3xl text-blue-500" />
               <span className="text-lg font-light">Tag</span>
