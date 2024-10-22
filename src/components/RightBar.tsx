@@ -1,11 +1,13 @@
 import gift from "../assets/gift.png";
 import ad from "../assets/add.png";
-import add from "../assets/person/9.jpeg";
 import { IUser, Users } from "../../src/index";
 import OnlineUsers from "./OnlineUsers";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
+import { Add } from "@mui/icons-material";
 
 type UserRightBar = Partial<IUser>;
 type UserAxios = Pick<IUser, "_id" | "username" | "profilePicture">;
@@ -18,6 +20,7 @@ const RightBar: React.FC<UserRightBar> = ({
   _id,
 }) => {
   const [friends, setFriends] = useState<UserAxios[]>([]);
+  const { user } = useSelector((state: RootState) => state.authSlice);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -26,16 +29,20 @@ const RightBar: React.FC<UserRightBar> = ({
           `http://localhost:8800/api/users/friends/${_id}`,
         );
         setFriends(data);
-        console.log(data);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    getFriends();
+    if (_id) {
+      getFriends();
+    }
   }, [_id]);
+
   const HomeRightBar = () => {
     return (
       <>
-        <div className="flex items-center">
+        <div className="flex  items-center">
           <img className="w-10 h-10 mr-3" src={gift} alt="gift" />
           <span className="font-thin text-base">
             <b>Pola Foster</b> and <b>3 other friends</b> hav a birtday today
@@ -62,6 +69,12 @@ const RightBar: React.FC<UserRightBar> = ({
   const ProfileRightBar = () => {
     return (
       <>
+        {username !== user?.username && (
+          <button className="border border-blue-300 rounded-md mt-[30px] mb-3 bg-blue-400 text-white px-3 py-1 flex items-center justify-center text-xl cursor-pointer font-medium hover:bg-blue-500 transition-colors">
+            Follow
+            <Add />
+          </button>
+        )}
         <h4 className="text-xl font-medium mb-3">User info</h4>
         <div className="mb-8">
           <div className="mb-2">
@@ -86,20 +99,26 @@ const RightBar: React.FC<UserRightBar> = ({
           </div>
         </div>
         <h4>User friends</h4>
-        {friends?.map((friend) => (
-          <Link to={`profile/${friend.username}`}>
-            <div className="flex flex-wrap gap-3">
-              <div className="flex flex-col mb-5 cursor-pointer">
-                <img
-                  className="w-24 h-24 object-cover rounded-lg"
-                  src={add}
-                  alt=""
-                />
-                <span>{friend.username}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
+        {friends
+          ? friends?.map((friend) => (
+              <Link key={friend._id} to={`/profile/${friend.username}`}>
+                <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-col mb-5 cursor-pointer">
+                    <img
+                      className="w-24 h-24 object-cover rounded-lg"
+                      src={
+                        friend?.profilePicture
+                          ? friend.profilePicture
+                          : "http://localhost:5173/src/assets/person/noAvatar.png"
+                      }
+                      alt=""
+                    />
+                    <span>{friend.username}</span>
+                  </div>
+                </div>
+              </Link>
+            ))
+          : "no frineds"}
       </>
     );
   };
@@ -107,7 +126,7 @@ const RightBar: React.FC<UserRightBar> = ({
   return (
     <aside className="grow-[3] w-1/5">
       <section className="pt-5 pr-5">
-        {city ? <ProfileRightBar /> : <HomeRightBar />}
+        {username ? <ProfileRightBar /> : <HomeRightBar />}
       </section>
     </aside>
   );

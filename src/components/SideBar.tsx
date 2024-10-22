@@ -14,7 +14,7 @@ import CloseFriends from "./CloseFriends";
 
 const SideBar = () => {
   return (
-    <aside className="grow-[3] h-[calc(100vh-3.125rem)] overflow-hidden hover:overflow-auto sticky top-1">
+    <aside className="w-1/4 h-[calc(100vh-3.125rem)] overflow-hidden hover:overflow-auto sticky top-1">
       <div className="p-5 ">
         <ul className=" flex flex-col gap-5 m-0 p-0 list-none mb-5">
           <li className="flex items-center ">

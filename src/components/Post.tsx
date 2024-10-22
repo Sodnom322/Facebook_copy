@@ -67,7 +67,7 @@ const Post: React.FC<IPosts> = ({
                 src={
                   user.profilePicture
                     ? user.profilePicture
-                    : "src/assets/person/noAvatar.png"
+                    : "/src/assets/person/noAvatar.png"
                 }
                 alt="post img"
               />

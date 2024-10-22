@@ -36,9 +36,9 @@ const Feed: React.FC<TFeed> = ({ username }) => {
   console.log(post);
 
   return (
-    <div className="grow-[2]">
+    <div className="w-3/4">
       <div className="p-5">
-        <Share />
+        {username === user?.username && <Share />}
         {post?.map((post) => <Post key={post._id} {...post} />)}
       </div>
     </div>

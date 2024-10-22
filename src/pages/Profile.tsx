@@ -20,7 +20,7 @@ const Profile = () => {
       setUser(res.data);
     };
     fetcedUser();
-  }, []);
+  }, [username]);
 
   return (
     <>
