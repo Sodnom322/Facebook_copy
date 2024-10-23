@@ -7,7 +7,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
-import { Add } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 
 type UserRightBar = Partial<IUser>;
 type UserAxios = Pick<IUser, "_id" | "username" | "profilePicture">;
@@ -20,7 +20,32 @@ const RightBar: React.FC<UserRightBar> = ({
   _id,
 }) => {
   const [friends, setFriends] = useState<UserAxios[]>([]);
+  const [followed, setFollowed] = useState<boolean>(false);
+
   const { user } = useSelector((state: RootState) => state.authSlice);
+
+  const handleClick = async () => {
+    try {
+      if (followed) {
+        await axios.put(`http://localhost:8800/api/users/${_id}/follow`, {
+          userId: _id,
+        });
+      } else {
+        await axios.put(`http://localhost:8800/api/users/${_id}/unfollow`, {
+          userId: _id,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setFollowed(!followed);
+  };
+
+  useEffect(() => {
+    if (user && user.followings && _id) {
+      setFollowed(user.followings.includes(_id));
+    }
+  }, [user, _id]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -70,9 +95,12 @@ const RightBar: React.FC<UserRightBar> = ({
     return (
       <>
         {username !== user?.username && (
-          <button className="border border-blue-300 rounded-md mt-[30px] mb-3 bg-blue-400 text-white px-3 py-1 flex items-center justify-center text-xl cursor-pointer font-medium hover:bg-blue-500 transition-colors">
-            Follow
-            <Add />
+          <button
+            onClick={handleClick}
+            className="border border-blue-300 rounded-md mt-[30px] mb-3 bg-blue-400 text-white px-3 py-1 flex items-center justify-center text-xl cursor-pointer font-medium hover:bg-blue-500 transition-colors"
+          >
+            {followed ? "Unfollow" : "Follow"}
+            {followed ? <Remove /> : <Add />}
           </button>
         )}
         <h4 className="text-xl font-medium mb-3">User info</h4>
